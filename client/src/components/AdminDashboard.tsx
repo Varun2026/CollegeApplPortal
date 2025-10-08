@@ -15,29 +15,8 @@ export default function AdminDashboard() {
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
-  // Mock data for demo purposes
-  //todo: remove mock functionality
-  const mockApplications: Application[] = [
-    {
-      id: "app-001",
-      encryptedData: "U2FsdGVkX1+encrypted-data-sample-1",
-      iv: "random-iv-base64-1",
-      submittedAt: new Date("2025-01-15T10:30:00"),
-    },
-    {
-      id: "app-002",
-      encryptedData: "U2FsdGVkX1+encrypted-data-sample-2",
-      iv: "random-iv-base64-2",
-      submittedAt: new Date("2025-01-16T14:20:00"),
-    },
-  ];
-
-  const { data: applications = mockApplications, isLoading } = useQuery<
-    Application[]
-  >({
+  const { data: applications = [], isLoading } = useQuery<Application[]>({
     queryKey: ["/api/applications"],
-    //todo: remove mock functionality - replace with actual API call
-    queryFn: () => Promise.resolve(mockApplications),
   });
 
   const handleDecrypt = async (application: Application) => {
