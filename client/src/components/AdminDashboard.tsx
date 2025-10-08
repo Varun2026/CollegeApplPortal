@@ -86,6 +86,11 @@ export default function AdminDashboard() {
             <p className="text-muted-foreground" data-testid="text-admin-subtitle">
               Manage encrypted college applications
             </p>
+            <div className="mt-2 px-3 py-1.5 bg-destructive/10 border border-destructive/20 rounded-lg">
+              <p className="text-xs text-destructive font-medium">
+                ⚠️ DEMO: Decryption uses client-side key. Production requires Azure Key Vault + authentication.
+              </p>
+            </div>
           </div>
           <Badge variant="outline" className="text-sm" data-testid="badge-app-count">
             {applications.length} Applications

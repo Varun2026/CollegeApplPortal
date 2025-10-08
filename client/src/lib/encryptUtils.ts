@@ -8,9 +8,17 @@
  * In production, integrate with Azure Key Vault for secure key management.
  */
 
-// Demo encryption key (256-bit / 32 bytes)
-// WARNING: Never store keys permanently in code in production!
-// This is for demonstration purposes only. Use Azure Key Vault in production.
+// ⚠️ CRITICAL SECURITY WARNING - DEMO ONLY ⚠️
+// This demo uses a hardcoded key that is visible to anyone inspecting the browser code.
+// This means ALL encrypted applications can be decrypted by ANY user who accesses the application.
+// This is INTENTIONAL for demonstration purposes to show the encryption flow.
+//
+// FOR PRODUCTION:
+// - NEVER use hardcoded keys in client-side code
+// - Integrate with Azure Key Vault for secure key management
+// - Implement proper authentication and authorization
+// - Use server-side key management with per-user or per-session keys
+// - This current implementation does NOT provide real security
 const DEMO_KEY_MATERIAL = "demo-college-app-encryption-key-32bytes!!";
 
 /**

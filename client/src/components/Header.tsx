@@ -11,7 +11,7 @@ export default function Header() {
     <header className="border-b bg-card sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/">
-          <a className="flex items-center gap-2 hover-elevate px-3 py-2 rounded-lg transition-colors" data-testid="link-home">
+          <div className="flex items-center gap-2 hover-elevate px-3 py-2 rounded-lg transition-colors cursor-pointer" data-testid="link-home">
             <Shield className="w-6 h-6 text-primary" />
             <div className="hidden md:block">
               <h1 className="font-semibold text-sm leading-tight">
@@ -21,31 +21,27 @@ export default function Header() {
                 End-to-End Encrypted
               </p>
             </div>
-          </a>
+          </div>
         </Link>
 
         <nav className="flex items-center gap-2">
           <Link href="/">
-            <a>
-              <Button
-                variant={location === "/" ? "default" : "ghost"}
-                size="sm"
-                data-testid="link-apply"
-              >
-                Apply
-              </Button>
-            </a>
+            <Button
+              variant={location === "/" ? "default" : "ghost"}
+              size="sm"
+              data-testid="link-apply"
+            >
+              Apply
+            </Button>
           </Link>
           <Link href="/admin">
-            <a>
-              <Button
-                variant={location === "/admin" ? "default" : "ghost"}
-                size="sm"
-                data-testid="link-admin"
-              >
-                Admin
-              </Button>
-            </a>
+            <Button
+              variant={location === "/admin" ? "default" : "ghost"}
+              size="sm"
+              data-testid="link-admin"
+            >
+              Admin
+            </Button>
           </Link>
           <Button
             variant="ghost"
