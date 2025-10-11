@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { decryptData } from "@/lib/encryptUtils";
 import { useToast } from "@/hooks/use-toast";
+import { GenAISummary } from "./GenAISummary";
 import type { Application, ApplicationData } from "@shared/schema";
 
 export default function AdminDashboard() {
@@ -73,6 +74,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background py-12 px-4">
+      <GenAISummary />
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -86,11 +88,7 @@ export default function AdminDashboard() {
             <p className="text-muted-foreground" data-testid="text-admin-subtitle">
               Manage encrypted college applications
             </p>
-            <div className="mt-2 px-3 py-1.5 bg-destructive/10 border border-destructive/20 rounded-lg">
-              <p className="text-xs text-destructive font-medium">
-                ⚠️ DEMO: Decryption uses client-side key. Production requires Azure Key Vault + authentication.
-              </p>
-            </div>
+            {/* Demo warning and red background removed */}
           </div>
           <Badge variant="outline" className="text-sm" data-testid="badge-app-count">
             {applications.length} Applications

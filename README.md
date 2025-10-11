@@ -1,373 +1,371 @@
 # End-to-End Data Encryption System for College Applications
 
-## Demo Version using Azure Key Vault Architecture
+## 🎓 Overview
 
-A full-stack web application demonstrating secure college application submissions with **client-side AES-GCM 256-bit encryption**. This demo showcases end-to-end encryption capabilities and is designed for easy future integration with Azure Key Vault, Terraform, Docker, and CI/CD pipelines.
+This is a comprehensive college application system that implements end-to-end encryption using Azure Key Vault, Azure SQL Database, and GenAI integration. The system ensures student data privacy while providing powerful administrative tools and AI-powered insights.
 
----
+## ✨ Features
 
-## 🚀 Features
+### 🔐 Security & Encryption
+- **End-to-End Encryption**: Student data is encrypted in the frontend using AES-GCM
+- **Azure Key Vault Integration**: Secure key management and storage
+- **Token-Based Authentication**: Admin access with secure token validation
+- **Data Privacy**: Encrypted data storage with secure decryption capabilities
 
-### Security
-- **Client-side AES-GCM 256-bit encryption** using Web Crypto API
-- Random IV (Initialization Vector) generation for each submission
-- Encrypted data transmission to backend
-- Secure file upload with validation (PDF/JPG, max 10MB)
-- No plaintext data stored on server
+### 🗄️ Data Management
+- **Azure SQL Database**: Persistent, scalable data storage
+- **Application Tracking**: Complete student application lifecycle management
+- **Data Analytics**: Comprehensive application statistics and insights
 
-### User Experience
-- **Multi-step form** with progress tracking:
-  1. Personal Information
-  2. Academic Information  
-  3. Document Upload
-  4. Review & Submit
-- Real-time form validation
-- File type and size validation
-- Success/error feedback messages
-- Professional, responsive design with Tailwind CSS
+### 🤖 AI-Powered Features
+- **GenAI Integration**: Azure OpenAI for application analysis
+- **Document Summarization**: AI-powered PDF content analysis
+- **Application Scoring**: Intelligent application quality assessment
+- **Data Insights**: AI-generated trends and recommendations
 
-### Admin Features
-- View all encrypted applications
-- Decrypt and view application data (demo purposes)
-- Expandable application details
-- Encrypted data preview
+### 👨‍💼 Administrative Tools
+- **Admin Dashboard**: Secure access to all applications
+- **Data Decryption**: Authorized access to student data
+- **Export Functionality**: CSV export for data analysis
+- **System Health Monitoring**: Real-time service status
 
----
+## 🏗️ Architecture
 
-## 📋 Requirements
-
-- **Node.js** 18+ or 20+
-- **npm** (comes with Node.js)
-- Modern web browser with Web Crypto API support
-
----
-
-## 🛠️ Installation & Setup
-
-### 1. Clone or access the project
-```bash
-cd your-project-directory
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │    Backend      │    │   Azure Cloud   │
+│   (React)       │    │   (Node.js)     │    │   Services      │
+├─────────────────┤    ├─────────────────┤    ├─────────────────┤
+│ • Student Form  │◄──►│ • API Routes    │◄──►│ • Key Vault     │
+│ • Encryption    │    │ • Controllers   │    │ • SQL Database  │
+│ • UI Components │    │ • Services      │    │ • OpenAI        │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-### 2. Install dependencies
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- Azure subscription
+- Azure Key Vault
+- Azure SQL Database
+- Azure OpenAI (optional, for GenAI features)
+
+### 1. Clone and Install
+
 ```bash
+git clone <repository-url>
+cd CollegeVault
 npm install
 ```
 
-### 3. Start the application
+### 2. Azure Setup
+
+#### Azure Key Vault Setup
+1. Create an Azure Key Vault in your Azure portal
+2. Note down the Key Vault name
+3. Create a service principal for authentication
+4. Grant the service principal access to Key Vault
+
+#### Azure SQL Database Setup
+1. Create an Azure SQL Database
+2. Note down server name, database name, and credentials
+3. Configure firewall rules to allow your IP
+4. Create the Applications table (see Database Schema section)
+
+#### Azure OpenAI Setup (Optional)
+1. Create an Azure OpenAI resource
+2. Deploy a GPT model
+3. Note down endpoint, API key, and deployment ID
+
+### 3. Environment Configuration
+
+Copy the environment template and configure your settings:
+
 ```bash
+cp backend/env.example .env
+```
+
+Edit `.env` with your Azure credentials:
+
+```env
+# Server Configuration
+NODE_ENV=development
+PORT=5000
+
+# Azure Key Vault
+AZURE_KEY_VAULT_NAME=your-keyvault-name
+AZURE_KEY_NAME=college-app-encryption-key
+AZURE_TENANT_ID=your-tenant-id
+AZURE_CLIENT_ID=your-client-id
+AZURE_CLIENT_SECRET=your-client-secret
+
+# Azure SQL Database
+AZURE_SQL_SERVER=your-server.database.windows.net
+AZURE_SQL_DATABASE=your-database-name
+AZURE_SQL_USER=your-username
+AZURE_SQL_PASSWORD=your-password
+
+# Azure OpenAI (Optional)
+AZURE_OPENAI_ENDPOINT=https://your-openai-resource.openai.azure.com/
+AZURE_OPENAI_API_KEY=your-openai-api-key
+AZURE_OPENAI_DEPLOYMENT_ID=your-deployment-id
+
+# Security
+ADMIN_TOKEN=admin-demo-token-2024
+```
+
+### 4. Database Initialization
+
+Initialize the database schema:
+
+```bash
+npm run db:init
+```
+
+### 5. Start the Application
+
+```bash
+# Start backend server
+npm run dev:backend
+
+# In another terminal, start frontend
 npm run dev
 ```
 
-The application will start on **http://localhost:5000** or **http://0.0.0.0:5000**
+## 📊 Database Schema
 
----
+The system uses Azure SQL Database with the following schema:
 
-## 📖 How to Use
-
-### For Students (Submit Application)
-
-1. **Navigate to the main page** (automatically opens at `/`)
-
-2. **Fill out the multi-step form:**
-   - **Step 1 - Personal Info**: Name, email, phone number
-   - **Step 2 - Academic Info**: Course, department, GPA (0.0-4.0)
-   - **Step 3 - Documents**: Upload PDF or JPG files (max 10MB each)
-   - **Step 4 - Review**: Review all information before submitting
-
-3. **Submit the application**
-   - Click "Encrypt & Submit"
-   - Data is encrypted in the browser using AES-GCM
-   - Encrypted data is sent to the backend
-   - Confirmation message appears on success
-
-4. **What happens behind the scenes:**
-   - A random 12-byte IV is generated
-   - All form data (including uploaded files as base64) is encrypted
-   - Only encrypted data and IV are sent to the server
-   - Server stores encrypted data in `applications.json`
-
-### For Admins (View Applications)
-
-1. **Navigate to Admin Dashboard**
-   - Click "Admin" in the header
-   - Or go to `/admin`
-
-2. **View submitted applications**
-   - See list of all applications with IDs and timestamps
-   - Applications show as "Encrypted" by default
-
-3. **Decrypt an application**
-   - Click "Decrypt" button on any application
-   - Data is decrypted client-side using the same key and IV
-   - Click "View" to expand and see full details
-
----
-
-## 🏗️ Project Structure
-
-```
-.
-├── client/                    # Frontend React application
-│   ├── src/
-│   │   ├── components/       # Reusable UI components
-│   │   │   ├── ApplicationForm.tsx    # Multi-step form
-│   │   │   ├── AdminDashboard.tsx     # Admin interface
-│   │   │   └── Header.tsx             # Navigation header
-│   │   ├── lib/
-│   │   │   ├── encryptUtils.ts        # AES-GCM encryption logic
-│   │   │   └── queryClient.ts         # TanStack Query setup
-│   │   ├── hooks/                     # Custom React hooks
-│   │   └── App.tsx                    # Main app component
-│   └── index.html
-├── server/                    # Backend Express API
-│   ├── routes.ts             # API endpoints
-│   ├── storage.ts            # File-based storage
-│   └── index.ts              # Server entry point
-├── shared/                    # Shared types and schemas
-│   └── schema.ts             # Zod schemas and TypeScript types
-├── applications.json         # Encrypted data storage (created on first submission)
-└── README.md                 # This file
+```sql
+CREATE TABLE Applications (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    name NVARCHAR(255),
+    email NVARCHAR(255),
+    phone NVARCHAR(50),
+    course NVARCHAR(255),
+    department NVARCHAR(255),
+    gpa DECIMAL(3,2),
+    document_name NVARCHAR(255),
+    encrypted_data VARBINARY(MAX),
+    iv NVARCHAR(255),
+    created_at DATETIME2 DEFAULT GETDATE()
+);
 ```
 
----
+## 🔌 API Endpoints
 
-## 🔐 Encryption Details
+### Application Endpoints
 
-### Algorithm: AES-GCM 256-bit
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/applications` | Submit new application |
+| GET | `/api/applications` | Get all applications |
+| GET | `/api/applications/:id` | Get specific application |
+| GET | `/api/applications/stats` | Get application statistics |
 
-- **Key Size**: 256 bits (32 bytes)
-- **IV Size**: 96 bits (12 bytes) - randomly generated per encryption
-- **Mode**: GCM (Galois/Counter Mode) - provides both encryption and authentication
+### Admin Endpoints
 
-### Demo Key Warning
-⚠️ **Important**: This demo uses a hardcoded key for demonstration purposes only. 
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/admin/decrypt/:id` | Decrypt application data |
+| GET | `/api/admin/applications` | Get all applications with decryption |
+| GET | `/api/admin/analytics` | Get application analytics |
+| GET | `/api/admin/export` | Export applications (CSV) |
+| GET | `/api/admin/health` | System health check |
 
-**For production deployment:**
-- Integrate with **Azure Key Vault** for secure key management
-- Implement key rotation policies
-- Use managed identities for Azure resources
-- Never commit keys to version control
+### GenAI Endpoints
 
-### File Handling
-- Files are converted to Base64 before encryption
-- Maximum file size: 10MB per file
-- Allowed types: PDF, JPG/JPEG
-- Validation occurs before encryption
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/genai/analyze` | Analyze application quality |
+| POST | `/api/genai/summarize` | Summarize document content |
+| POST | `/api/genai/insights` | Generate data insights |
+| POST | `/api/genai/score` | Score application quality |
 
----
+## 🔐 Security Features
 
-## 📡 API Endpoints
+### Encryption Flow
 
-### POST `/api/applications`
-Submit a new encrypted application
+1. **Frontend Encryption**: Student data is encrypted using AES-GCM in the browser
+2. **Key Management**: Encryption keys are stored securely in Azure Key Vault
+3. **Data Storage**: Encrypted data is stored in Azure SQL Database
+4. **Admin Access**: Authorized admins can decrypt data using Azure Key Vault
 
-**Request Body:**
-```json
-{
-  "encryptedData": "base64-encoded-encrypted-data",
-  "iv": "base64-encoded-initialization-vector"
-}
+### Authentication
+
+- **Admin Token**: Simple token-based authentication for admin endpoints
+- **Rate Limiting**: Protection against brute force attacks
+- **Security Headers**: Comprehensive security headers for all responses
+
+## 🤖 GenAI Integration
+
+### Application Analysis
+
+The system uses Azure OpenAI to:
+- Analyze application quality and provide scores
+- Generate insights from application data
+- Summarize document content
+- Provide recommendations for admissions
+
+### AI Features
+
+- **Smart Scoring**: AI-powered application quality assessment
+- **Document Analysis**: Automatic PDF content summarization
+- **Trend Analysis**: AI-generated insights from application data
+- **Recommendations**: Intelligent suggestions for process improvement
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+CollegeVault/
+├── backend/                 # New backend structure
+│   ├── app.js             # Main application entry point
+│   ├── routes/            # API route definitions
+│   ├── controllers/       # Request handlers
+│   ├── services/          # Business logic services
+│   ├── utils/             # Utility functions
+│   └── scripts/           # Database scripts
+├── client/                # Frontend React application
+├── server/                # Legacy server (for reference)
+└── shared/                # Shared schemas and types
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "applicationId": "uuid",
-  "message": "Application submitted successfully"
-}
-```
+### Backend Services
 
-### GET `/api/applications`
-Retrieve all encrypted applications (admin only)
+- **AzureKeyVaultService**: Key management and encryption
+- **AzureSqlService**: Database operations
+- **GenAIService**: AI-powered analysis
+- **ApplicationController**: Application management
+- **AdminController**: Administrative functions
 
-**Response:**
-```json
-[
-  {
-    "id": "uuid",
-    "encryptedData": "base64-encoded-encrypted-data",
-    "iv": "base64-encoded-initialization-vector",
-    "submittedAt": "2025-01-15T10:30:00.000Z"
-  }
-]
-```
+### Running in Development
 
-### GET `/api/applications/:id`
-Retrieve a specific application by ID
-
-### GET `/api/health`
-Health check endpoint
-
----
-
-## 🎯 Demo for Project Review
-
-### What to Show
-
-1. **Security in Action**
-   - Open browser DevTools → Network tab
-   - Submit an application
-   - Show that only encrypted data is transmitted
-   - Display the encrypted payload in Network request
-
-2. **Encryption Process**
-   - Open browser Console
-   - Submit application and show encryption logs
-   - Display randomly generated IV
-   - Show encrypted data length
-
-3. **File Storage**
-   - Open `applications.json` in the project root
-   - Show encrypted data stored on disk
-   - Demonstrate that original data is not readable
-
-4. **Admin Decryption**
-   - Navigate to Admin Dashboard
-   - Decrypt an application
-   - Show original data successfully recovered
-
-5. **Validation & Security**
-   - Try uploading wrong file type (e.g., .txt) → Rejected
-   - Try uploading file > 10MB → Rejected
-   - Submit incomplete form → Validation errors
-
-### Key Points to Mention
-- ✅ End-to-end encryption (encrypted in browser, decrypted in browser)
-- ✅ Server never sees plaintext data
-- ✅ Each submission uses unique random IV
-- ✅ Production-ready for Azure Key Vault integration
-- ✅ Comprehensive validation and error handling
-- ✅ Professional UI/UX with accessibility considerations
-
----
-
-## 🚢 Next Steps for Production
-
-### Azure Integration
-1. **Azure Key Vault Setup**
-   - Create Key Vault resource
-   - Store encryption keys securely
-   - Use managed identities for access
-
-2. **Terraform Infrastructure**
-   ```hcl
-   resource "azurerm_key_vault" "college_app" {
-     name                = "college-app-kv"
-     location            = azurerm_resource_group.main.location
-     resource_group_name = azurerm_resource_group.main.name
-     tenant_id          = data.azurerm_client_config.current.tenant_id
-     sku_name           = "standard"
-   }
-   ```
-
-3. **Docker Deployment**
-   - Create `Dockerfile` for containerization
-   - Set up Azure Container Registry
-   - Deploy to Azure App Service or AKS
-
-4. **CI/CD Pipeline**
-   - GitHub Actions or Azure DevOps
-   - Automated testing
-   - Staging and production environments
-   - Automated deployments
-
-### Security Enhancements
-- Implement authentication (OAuth 2.0)
-- Add rate limiting
-- Enable HTTPS/TLS
-- Implement audit logging
-- Add data retention policies
-- Set up backup and recovery
-
----
-
-## 🧪 Testing
-
-### Manual Testing Checklist
-- [ ] Submit application with all fields filled
-- [ ] Test file upload (PDF and JPG)
-- [ ] Verify file size validation (10MB limit)
-- [ ] Test file type validation (reject non-PDF/JPG)
-- [ ] Check form validation for required fields
-- [ ] Submit and verify in Admin dashboard
-- [ ] Decrypt application and verify data integrity
-- [ ] Test dark/light theme toggle
-- [ ] Test responsive design on mobile
-
-### Automated Testing (Future)
-- Unit tests for encryption utilities
-- Integration tests for API endpoints
-- E2E tests with Playwright
-- Security testing for encryption strength
-
----
-
-## 🐛 Troubleshooting
-
-### Application won't start
 ```bash
-# Clear node modules and reinstall
-rm -rf node_modules package-lock.json
-npm install
+# Backend only
+npm run dev:backend
+
+# Frontend only
 npm run dev
+
+# Both (recommended)
+npm run dev & npm run dev:backend
 ```
 
-### Port 5000 already in use
+## 🚀 Deployment
+
+### Docker Deployment
+
 ```bash
-# Kill process using port 5000
-lsof -ti:5000 | xargs kill -9
+# Build Docker image
+docker build -t college-vault .
+
+# Run container
+docker run -p 5000:5000 --env-file .env college-vault
 ```
 
-### Encryption fails in browser
-- Ensure you're using a modern browser (Chrome 60+, Firefox 75+, Safari 14+)
-- Check browser console for errors
-- Verify Web Crypto API is available: `crypto.subtle !== undefined`
+### Azure Deployment
 
----
+The system is designed for Azure deployment with:
+- Azure App Service for hosting
+- Azure Key Vault for key management
+- Azure SQL Database for data storage
+- Azure OpenAI for AI features
 
-## 📝 Technical Specifications
+## 📈 Monitoring and Logging
 
-- **Frontend**: React 18, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Express.js
-- **Encryption**: Web Crypto API (SubtleCrypto)
-- **Validation**: Zod schemas
-- **State Management**: TanStack Query v5
-- **Routing**: Wouter (lightweight React router)
-- **Form Handling**: React Hook Form
-- **Storage**: File-based JSON (development), ready for database
+### Health Checks
 
----
+- **System Health**: `/api/health` - Basic system status
+- **Admin Health**: `/api/admin/health` - Detailed service status
+- **GenAI Health**: `/api/genai/health` - AI service status
+
+### Logging
+
+The system provides comprehensive logging:
+- Request/response logging
+- Performance metrics
+- Security events
+- Error tracking
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `AZURE_KEY_VAULT_NAME` | Azure Key Vault name | Yes |
+| `AZURE_SQL_SERVER` | Azure SQL server | Yes |
+| `AZURE_SQL_DATABASE` | Database name | Yes |
+| `AZURE_SQL_USER` | Database username | Yes |
+| `AZURE_SQL_PASSWORD` | Database password | Yes |
+| `ADMIN_TOKEN` | Admin authentication token | Yes |
+| `AZURE_OPENAI_ENDPOINT` | OpenAI endpoint | No |
+| `AZURE_OPENAI_API_KEY` | OpenAI API key | No |
+
+### Security Configuration
+
+- Change default admin tokens in production
+- Configure proper CORS settings
+- Set up rate limiting
+- Enable security headers
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
 ## 📄 License
 
-This is a demo project for educational purposes.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
----
+## 🆘 Support
 
-## 👨‍💻 Architecture Notes
+For support and questions:
+- Check the troubleshooting section below
+- Review the API documentation
+- Open an issue on GitHub
 
-This application is designed with **future Azure deployment** in mind:
+## 🔍 Troubleshooting
 
-- **Stateless backend** ready for horizontal scaling
-- **Environment-based configuration** for different deployments
-- **Modular architecture** for easy Azure service integration
-- **File storage abstraction** ready to swap with Azure Blob Storage
-- **Key management placeholder** ready for Azure Key Vault
-- **API design** follows REST best practices
-- **Security-first approach** with encryption by default
+### Common Issues
 
----
+1. **Database Connection Failed**
+   - Check Azure SQL firewall rules
+   - Verify connection credentials
+   - Ensure database server is running
 
-## 📞 Support
+2. **Key Vault Access Denied**
+   - Verify service principal permissions
+   - Check Key Vault access policies
+   - Ensure correct tenant/client IDs
 
-For questions or issues with this demo, check:
-1. Browser console for client-side errors
-2. Server logs for backend errors
-3. `applications.json` for stored encrypted data
-4. Network tab to inspect API calls
+3. **GenAI Features Not Working**
+   - Verify Azure OpenAI configuration
+   - Check API key and endpoint
+   - Ensure model deployment is active
 
----
+### Debug Mode
 
-**Built with security and scalability in mind** 🔒
+Enable debug logging by setting:
+```env
+DEBUG_MODE=true
+LOG_LEVEL=debug
+```
+
+## 🎯 Future Enhancements
+
+- [ ] Multi-tenant support
+- [ ] Advanced analytics dashboard
+- [ ] Real-time notifications
+- [ ] Mobile application
+- [ ] Advanced AI features
+- [ ] Automated testing
+- [ ] CI/CD pipeline
+- [ ] Kubernetes deployment

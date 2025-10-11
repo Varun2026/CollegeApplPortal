@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
+import { ApplicationQualityScoring } from "./GenAIFeedback";
 import {
   encryptData,
   decryptData,
@@ -264,11 +265,8 @@ export default function ApplicationForm() {
           <p className="text-muted-foreground" data-testid="text-page-subtitle">
             End-to-End Encrypted with AES-GCM 256-bit Security
           </p>
-          <div className="mt-2 px-4 py-2 bg-destructive/10 border border-destructive/20 rounded-lg max-w-2xl mx-auto">
-            <p className="text-xs text-destructive font-medium text-center">
-              ⚠️ DEMO VERSION: Uses client-side key for demonstration only. Not secure for production use.
-            </p>
-          </div>
+          {/* Demo warning and red background removed */}
+  <ApplicationQualityScoring />
         </div>
 
         {/* Progress Steps */}

@@ -1,0 +1,24 @@
+name: Azure CI/CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build -t collegeapp-backend .
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Push to Azure Container Registry
+        run: |
+          az acr login --name ${{ secrets.ACR_NAME }}
+          docker tag collegeapp-backend ${{ secrets.ACR_NAME }}.azurecr.io/collegeapp-backend:latest
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/collegeapp-backend:latest
+      - name: Deploy to Azure Container Apps
+        run: az containerapp update --name collegeapp-backend --resource-group ${{ secrets.AZURE_RG }} --image ${{ secrets.ACR_NAME }}.azurecr.io/collegeapp-backend:latest
