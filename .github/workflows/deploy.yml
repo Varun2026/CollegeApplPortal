@@ -1,0 +1,30 @@
+name: Deploy to AKS
+on:
+workflow_run:
+workflows: ["Build and Push"]
+types:
+- completed
+
+
+jobs:
+deploy:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+
+
+- name: Azure Login
+uses: azure/login@v1
+with:
+creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+
+- name: Get AKS credentials
+run: |
+az aks get-credentials --resource-group ${ { secrets.RESOURCE_GROUP }} --name ${ { secrets.AKS_NAME }} --overwrite-existing
+
+
+- name: kubectl apply
+run: |
+env | sort
+kubectl apply -f k8s/backend-deployment.yaml

@@ -1,0 +1,14 @@
+{
+"name": "college-backend",
+"version": "1.0.0",
+"main": "server.js",
+"scripts": {
+"start": "node server.js"
+},
+"dependencies": {
+"express": "^4.18.2",
+"@azure/identity": "^3.0.0",
+"@azure/keyvault-secrets": "^4.3.0",
+"axios": "^1.4.0"
+}
+}

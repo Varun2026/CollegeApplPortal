@@ -1,0 +1,30 @@
+name: Build and Push
+on:
+push:
+paths:
+- 'apps/**'
+
+
+jobs:
+build:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+
+
+- name: Login to Azure
+uses: azure/login@v1
+with:
+creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+
+- name: Build backend image
+run: |
+docker build -t ${ { secrets.ACR_LOGIN } }/collegerecords-backend:latest ./apps/backend
+echo done
+
+
+- name: Push backend image
+run: |
+az acr login --name ${ { secrets.ACR_NAME }}
+docker push ${ { secrets.ACR_LOGIN } }/collegerecords-backend:latest
